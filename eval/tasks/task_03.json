@@ -1,0 +1,216 @@
+{
+  "id": "task_03",
+  "title": "Make an optional request field required",
+  "domain": "REST API versioning",
+  "instructions": "You are reviewing an API contract change for backward compatibility. Existing clients are JSON API consumers that tolerate unknown response fields but send exactly the fields they were built against. For each change below, label it \"breaking\" if it can cause an existing client integration to fail, otherwise \"non-breaking\". Reply with ONLY a JSON object mapping change IDs to \"breaking\" or \"non-breaking\".",
+  "changes": [
+    {
+      "id": "C1",
+      "description": "Make `note` a required request field on POST /orders."
+    }
+  ],
+  "old_spec": {
+    "base_url": "https://api.example.com/v1",
+    "paths": {
+      "/orders": {
+        "GET": {
+          "summary": "List orders",
+          "parameters": [
+            {
+              "name": "limit",
+              "type": "integer"
+            },
+            {
+              "name": "cursor",
+              "type": "string"
+            }
+          ],
+          "required_parameters": [],
+          "request_body": null,
+          "response_body": {
+            "orders": "array",
+            "next_cursor": "string"
+          }
+        },
+        "POST": {
+          "summary": "Create order",
+          "parameters": [],
+          "required_parameters": [],
+          "request_body": {
+            "amount": "number",
+            "currency": "string",
+            "customer_id": "string",
+            "note": "string"
+          },
+          "response_body": {
+            "id": "string",
+            "status": "string",
+            "amount": "number"
+          }
+        }
+      },
+      "/orders/{id}": {
+        "GET": {
+          "summary": "Get order",
+          "parameters": [
+            {
+              "name": "id",
+              "type": "string"
+            }
+          ],
+          "required_parameters": [
+            "id"
+          ],
+          "request_body": null,
+          "response_body": {
+            "id": "string",
+            "status": "string",
+            "amount": "number",
+            "note": "string"
+          }
+        },
+        "DELETE": {
+          "summary": "Cancel order",
+          "parameters": [
+            {
+              "name": "id",
+              "type": "string"
+            }
+          ],
+          "required_parameters": [
+            "id"
+          ],
+          "request_body": null,
+          "response_body": {
+            "deleted": "boolean"
+          }
+        }
+      },
+      "/customers/{id}": {
+        "GET": {
+          "summary": "Get customer",
+          "parameters": [
+            {
+              "name": "id",
+              "type": "string"
+            }
+          ],
+          "required_parameters": [
+            "id"
+          ],
+          "request_body": null,
+          "response_body": {
+            "id": "string",
+            "email": "string",
+            "name": "string"
+          }
+        }
+      }
+    }
+  },
+  "new_spec": {
+    "base_url": "https://api.example.com/v1",
+    "paths": {
+      "/orders": {
+        "GET": {
+          "summary": "List orders",
+          "parameters": [
+            {
+              "name": "limit",
+              "type": "integer"
+            },
+            {
+              "name": "cursor",
+              "type": "string"
+            }
+          ],
+          "required_parameters": [],
+          "request_body": null,
+          "response_body": {
+            "orders": "array",
+            "next_cursor": "string"
+          }
+        },
+        "POST": {
+          "summary": "Create order",
+          "parameters": [],
+          "required_parameters": [
+            "note"
+          ],
+          "request_body": {
+            "amount": "number",
+            "currency": "string",
+            "customer_id": "string",
+            "note": "string"
+          },
+          "response_body": {
+            "id": "string",
+            "status": "string",
+            "amount": "number"
+          }
+        }
+      },
+      "/orders/{id}": {
+        "GET": {
+          "summary": "Get order",
+          "parameters": [
+            {
+              "name": "id",
+              "type": "string"
+            }
+          ],
+          "required_parameters": [
+            "id"
+          ],
+          "request_body": null,
+          "response_body": {
+            "id": "string",
+            "status": "string",
+            "amount": "number",
+            "note": "string"
+          }
+        },
+        "DELETE": {
+          "summary": "Cancel order",
+          "parameters": [
+            {
+              "name": "id",
+              "type": "string"
+            }
+          ],
+          "required_parameters": [
+            "id"
+          ],
+          "request_body": null,
+          "response_body": {
+            "deleted": "boolean"
+          }
+        }
+      },
+      "/customers/{id}": {
+        "GET": {
+          "summary": "Get customer",
+          "parameters": [
+            {
+              "name": "id",
+              "type": "string"
+            }
+          ],
+          "required_parameters": [
+            "id"
+          ],
+          "request_body": null,
+          "response_body": {
+            "id": "string",
+            "email": "string",
+            "name": "string"
+          }
+        }
+      }
+    }
+  },
+  "ground_truth": {
+    "C1": "breaking"
+  },
+  "ground_truth_rationale": "Requiring a previously optional input breaks clients that omit it."
+}
